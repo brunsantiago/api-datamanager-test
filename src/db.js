@@ -1,5 +1,4 @@
 const { createPool } = require("mysql2/promise");
-//const mysql = require("mysql2/promise");
 
 const {
   DB_DATABASE,
@@ -19,8 +18,5 @@ const pool = createPool({
   flags: DB_FLAGS
 });
 
-// pool.query("SELECT * FROM devices") {
-//    console.log(rows);
-// });
 
 module.exports = pool;

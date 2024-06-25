@@ -1,13 +1,6 @@
-// import express from "express";
-// import morgan from "morgan";
-// import cors from "cors";
-
 const express = require("express");
 const morgan = require("morgan");
 const cors = require("cors");
-
-// import employeesRoutes from "./routes/employees.routes.js";
-// import indexRoutes from "./routes/index.routes.js";
 
 const employeesRoutes = require("./routes/employees.routes.js");
 const indexRoutes = require("./routes/index.routes.js");

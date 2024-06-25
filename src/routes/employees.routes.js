@@ -36,7 +36,7 @@ const {
   getLastVersion,
   getClientesBrouclean,
   addRequestDeviceBrouclean,
-  getPersonalBrouclean,
+//  getPersonalBrouclean,
   userRegisterBrouclean,
   userLoginBrouclean,
   getUserProfileBrouclean,
@@ -46,7 +46,7 @@ const {
   getLastSessionBrouclean,
   closeLastSessionBrouclean,
   setHoraEgresoBrouclean,
-  getLastVersionBrouclean,
+//  getLastVersionBrouclean,
   userRecoveryKeyBrouclean,
   getAllUsersBrouclean,
   deleteUserBrouclean,
@@ -59,9 +59,8 @@ const {
   getClienteBrouclean,
   deleteDeviceBrouclean,
   updateDeviceBrouclean,
-  updateVersionDeviceBrouclean
+  updateVersionDevice
   } = require("../controllers/employees.controller.js");
-
 
 
 const router = Router();
@@ -72,16 +71,16 @@ const router = Router();
 router.get("/users", getAllUsers);
 
 // GET Obtener perfil de usuario
-router.get("/users/:persCodi", getUserProfile);
+router.get("/users/:persCodi/:idEmpresa", getUserProfile);
 
 //POST Registro de usuario
-router.post("/register", userRegister);
+router.post("/register/:idEmpresa", userRegister);
 
 //POST Login de usuario
-router.post("/login", userLogin);
+router.post("/login/:idEmpresa", userLogin);
 
 //PATCH User Key
-router.patch("/recovery_key", userRecoveryKey);
+router.patch("/recovery_key/:idEmpresa", userRecoveryKey);
 
 //DELETE User
 router.delete("/users/:userCodi", deleteUser );
@@ -90,36 +89,36 @@ router.delete("/users/:userCodi", deleteUser );
 // TABLE LAST SESION
 
 // POST Cargar Ultima Sesion
-router.post("/last_session", setLastSession);
+router.post("/last_session/:idEmpresa", setLastSession);
 
 // GET Cargar Ultima Sesion
-router.get("/last_session/:persCodi", getLastSession);
+router.get("/last_session/:persCodi/:idEmpresa", getLastSession);
 
 // PATCH Cerrar Ultima Sesion
-router.patch("/last_session/:persCodi", closeLastSession);
+router.patch("/last_session/:persCodi/:idEmpresa", closeLastSession);
 
 
 // TABLE ASIGVIGI
 
-// PATCH Cargar Hora Egreso Vigilador
+// PATCH Cargar Hora Egreso Empleado
 router.patch("/asigvigi/:asigId", setHoraEgresoVigilador)
 
-// POST Cargar Hora Ingreso Vigilador
+// POST Cargar Hora Ingreso Empleado
 router.post("/asigvigi", addPuestoVigilador);
 
 // TABLE PERSONAL
 
-// GET Personal (SAB-5) Ver si se filtra por ACTIVO
-router.get("/personal/:nroLegajo", getPersonal);
+// GET Personal
+router.get("/personal/:nroLegajo/:idEmpresa", getPersonal);
 
 
 // TABLE OBJETIVO (CLIENTES)
 
-// GET all Clientes (Activos - SAB-5)
-router.get("/clientes", getClientes);
+// GET all Clientes
+router.get("/clientes/:idEmpresa", getClientes);
 
 // GET Cliente (Activo - SAB-5)
-router.get("/clientes/:nombreCliente", getCliente);
+router.get("/clientes/:nombreCliente/:idEmpresa", getCliente);
 
 // TABLE PUESGRUP (OBJETIVOS)
 
@@ -136,13 +135,13 @@ router.get("/objetivos/coordinate/:idObjetivo", requestCoordinate)
 // TABLE DEVICE
 
 //GET Device
-router.get("/devices/:androidID", getDevice);
+router.get("/devices/:androidID/:idEmpresa", getDevice);
 
 //INSERT Device
-router.post("/devices", addDevice);
+router.post("/devices/:idEmpresa", addDevice);
 
 //GET All Devices
-router.get("/devices", getAllDevices);
+router.get("/devices/all/:idEmpresa", getAllDevices);
 
 //DELETE Device
 router.delete("/devices/:androidID", deleteDevice );
@@ -150,11 +149,14 @@ router.delete("/devices/:androidID", deleteDevice );
 //UPDATE Device
 router.put("/devices", updateDevice );
 
+//UPDATE Version Device
+router.patch("/devices/:androidId/:idEmpresa", updateVersionDevice );
+
 
 // TABLE REQUEST DEVICE
 
 // INSERT Request Device
-router.post("/request_device", addRequestDevice);
+router.post("/request_device/:idEmpresa", addRequestDevice);
 
 //GET All Request Devices
 router.get("/request_device", getRequestDevices);
@@ -179,7 +181,7 @@ router.get("/puestos/:idCliente/:idObjetivo", getPuestos);
 //TABLE APP VERSION
 
 //GET Ultima version de la App disponible
-router.get("/app_version/last_version", getLastVersion);
+router.get("/app_version/last_version/:idEmpresa", getLastVersion);
 
 ////////////////////////////////////////////////////////////////////////////////
 //// BROUCLEAN FUNCTIONS ///////////////////////////////////////////////////////
@@ -216,7 +218,7 @@ router.delete("/brouclean/request_device", deleteAllRequestDeviceBrouclean );
 // TABLE PERSONAL
 
 // GET Personal (BROUCLEAN)
-router.get("/brouclean/personal/:nroLegajo", getPersonalBrouclean);
+//router.get("/brouclean/personal/:nroLegajo", getPersonalBrouclean);
 
 // TABLE USERS
 
@@ -253,7 +255,7 @@ router.delete("/brouclean/devices/:androidID", deleteDeviceBrouclean);
 router.put("/brouclean/devices", updateDeviceBrouclean );
 
 //UPDATE Version Device
-router.patch("/brouclean/devices/:androidId", updateVersionDeviceBrouclean );
+// router.patch("/brouclean/devices/:androidId", updateVersionDeviceBrouclean );
 
 // TABLE ASIG BROUCLEAN
 
@@ -277,7 +279,7 @@ router.patch("/brouclean/last_session/:persCodi", closeLastSessionBrouclean);
 //TABLE APP VERSION
 
 //GET Ultima version de la App disponible
-router.get("/brouclean/app_version/last_version", getLastVersionBrouclean);
+//router.get("/brouclean/app_version/last_version", getLastVersionBrouclean);
 
 
 
