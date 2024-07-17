@@ -141,7 +141,7 @@ router.get("/devices/:androidID/:idEmpresa", getDevice);
 router.post("/devices/:idEmpresa", addDevice);
 
 //GET All Devices
-router.get("/devices/all/:idEmpresa", getAllDevices);
+router.get("/devices/:idEmpresa", getAllDevices);
 
 //DELETE Device
 router.delete("/devices/:androidID", deleteDevice );
