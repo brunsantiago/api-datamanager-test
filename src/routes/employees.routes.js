@@ -59,7 +59,8 @@ const {
   getClienteBrouclean,
   deleteDeviceBrouclean,
   updateDeviceBrouclean,
-  updateVersionDevice
+  updateVersionDevice,
+  getAllHolidays
   } = require("../controllers/employees.controller.js");
 
 
@@ -182,6 +183,11 @@ router.get("/puestos/:idCliente/:idObjetivo", getPuestos);
 
 //GET Ultima version de la App disponible
 router.get("/app_version/last_version/:idEmpresa", getLastVersion);
+
+//TABLE FERIADOS
+
+//GET todos los feriados
+router.get("/feriados", getAllHolidays);
 
 ////////////////////////////////////////////////////////////////////////////////
 //// BROUCLEAN FUNCTIONS ///////////////////////////////////////////////////////

@@ -478,6 +478,17 @@ const getLastVersion = async (req, res) => {
   }
 };
 
+//TABLE feriados
+
+const getAllHolidays = async (req, res) => {
+  try {
+    const [rows] = await pool.query("SELECT * FROM feriados");
+    res.json(rows);
+  } catch (error) {
+    res.status(500).json({ message: "Something goes wrong" });
+  }
+};
+
 
 ////////////////////////////////////////////////////////////////////////////////
 //// BROUCLEAN FUNCTIONS ///////////////////////////////////////////////////////
@@ -972,5 +983,6 @@ module.exports = {
   getClienteBrouclean,
   deleteDeviceBrouclean,
   updateDeviceBrouclean,
-  updateVersionDevice
+  updateVersionDevice,
+  getAllHolidays
   };
