@@ -60,7 +60,8 @@ const {
   deleteDeviceBrouclean,
   updateDeviceBrouclean,
   updateVersionDevice,
-  getAllHolidays
+  getAllHolidays,
+  getPuestosFeriados
   } = require("../controllers/employees.controller.js");
 
 
@@ -178,6 +179,9 @@ router.delete("/request_device", deleteAllRequestDevice );
 
 // GET Puestos Activos por Cliente y Objetivo
 router.get("/puestos/:idCliente/:idObjetivo", getPuestos);
+
+// GET Puestos Activos Feriados por Cliente y Objetivo
+router.get("/puestos/feriados/:idCliente/:idObjetivo", getPuestosFeriados);
 
 //TABLE APP VERSION
 
