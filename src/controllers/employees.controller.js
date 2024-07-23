@@ -467,7 +467,7 @@ const getPuestos = async (req, res) => {
 const getPuestosFeriados = async (req, res) => {
   try {
     const { idCliente, idObjetivo } = req.params;
-    const [rows] = await pool.query("SELECT * FROM puestos_test WHERE PUES_OBJE = ? AND PUES_GRUP = ? AND PUES_TIPO != 3 AND PUES_FERI = 1",
+    const [rows] = await pool.query("SELECT * FROM puestos_test WHERE PUES_OBJE = ? AND PUES_GRUP = ? AND PUES_TIPO != 3",
     [ idCliente, idObjetivo ]);
     res.json(rows);
   } catch (error) {

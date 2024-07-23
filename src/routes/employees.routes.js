@@ -181,7 +181,7 @@ router.delete("/request_device", deleteAllRequestDevice );
 router.get("/puestos/:idCliente/:idObjetivo", getPuestos);
 
 // GET Puestos Activos Feriados por Cliente y Objetivo
-router.get("/puestos/feriados/:idCliente/:idObjetivo", getPuestosFeriados);
+router.get("/puestos/test/:idCliente/:idObjetivo", getPuestosFeriados);
 
 //TABLE APP VERSION
 
