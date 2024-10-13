@@ -45,7 +45,7 @@ const router = Router();
 // TABLE USERS
 
 // GET Obtener todos los usuarios
-router.get("/users", getAllUsers);
+router.get("/users/:idEmpresa", getAllUsers);
 
 // GET Obtener perfil de usuario
 router.get("/users/:persCodi/:idEmpresa", getUserProfile);
@@ -60,7 +60,7 @@ router.post("/login/:idEmpresa", userLogin);
 router.patch("/recovery_key/:idEmpresa", userRecoveryKey);
 
 //DELETE User
-router.delete("/users/:userCodi", deleteUser );
+router.delete("/users/:userCodi/:idEmpresa", deleteUser );
 
 
 // TABLE LAST SESION
@@ -83,6 +83,7 @@ router.patch("/asigvigi/:asigId", setHoraEgresoVigilador)
 // POST Cargar Hora Ingreso Empleado
 router.post("/asigvigi", addPuestoVigilador);
 
+
 // TABLE PERSONAL
 
 // GET Personal
@@ -94,8 +95,9 @@ router.get("/personal/:nroLegajo/:idEmpresa", getPersonal);
 // GET all Clientes
 router.get("/clientes/:idEmpresa", getClientes);
 
-// GET Cliente (Activo - SAB-5)
+// GET Cliente (Activo)
 router.get("/clientes/:nombreCliente/:idEmpresa", getCliente);
+
 
 // TABLE PUESGRUP (OBJETIVOS)
 
@@ -121,10 +123,10 @@ router.post("/devices/:idEmpresa", addDevice);
 router.get("/devices/:idEmpresa", getAllDevices);
 
 //DELETE Device
-router.delete("/devices/:androidID", deleteDevice );
+router.delete("/devices/:androidID/:idEmpresa", deleteDevice );
 
 //UPDATE Device
-router.put("/devices", updateDevice );
+router.put("/devices/:idEmpresa", updateDevice );
 
 //UPDATE Version Device
 router.patch("/devices/:androidId/:idEmpresa", updateVersionDevice );
@@ -136,19 +138,20 @@ router.patch("/devices/:androidId/:idEmpresa", updateVersionDevice );
 router.post("/request_device/:idEmpresa", addRequestDevice);
 
 //GET All Request Devices
-router.get("/request_device", getRequestDevices);
+router.get("/request_device/:idEmpresa", getRequestDevices);
 
 //GET All Request Devices Pending
-router.get("/request_device/count_pending", countPending);
+router.get("/request_device/count_pending/:idEmpresa", countPending);
 
 //PATCH Request Devices Change Status
-router.patch("/request_device/:androidID", statusAdded );
+router.patch("/request_device/:androidID/:idEmpresa", statusAdded );
 
 //DELETE Request Devices
-router.delete("/request_device/:androidID", deleteRequestDevice );
+router.delete("/request_device/:androidID/:idEmpresa", deleteRequestDevice );
 
 //DELETE Request Devices
-router.delete("/request_device", deleteAllRequestDevice );
+router.delete("/request_device/:idEmpresa", deleteAllRequestDevice );
+
 
 // TABLE PUESTOS
 

@@ -5,7 +5,9 @@ const bcryptjs = require('bcryptjs');
 
 const getAllUsers = async (req, res) => {
   try {
-    const [rows] = await pool.query("SELECT USER_CODI, USER_LEGA, USER_PERF, PERS_NOMB, PERS_SECT, PERS_FEGR FROM users JOIN personal ON users.USER_CODI = personal.PERS_CODI;");
+    const { idEmpresa } = req.params;
+    let table_name = selectTableUsers(idEmpresa);
+    const [rows] = await pool.query("SELECT USER_CODI, USER_LEGA, USER_PERF, PERS_NOMB, PERS_SECT, PERS_FEGR FROM " + table_name + " JOIN personal ON " + table_name + ".USER_CODI = personal.PERS_CODI;");
     res.json(rows);
   }
   catch (error) {
@@ -86,8 +88,9 @@ const userRecoveryKey = async (req, res) => {
 
 const deleteUser = async (req, res) => {
   try {
-    const { userCodi } = req.params;
-    const [result] = await pool.query("DELETE FROM users WHERE USER_CODI = ?",[ userCodi ]);
+    const { userCodi, idEmpresa } = req.params;
+    let table_name = selectTableUsers(idEmpresa);
+    const [result] = await pool.query("DELETE FROM " + table_name + " WHERE USER_CODI = ?",[ userCodi ]);
     if (result.affectedRows === 0){
       res.status(404).json({ result: 0 }); // UserCodi no econtrado
     }else{
@@ -262,9 +265,11 @@ const getDevice = async (req, res) => {
 
 const addDevice = async (req, res) => {
   try {
+    const { idEmpresa } = req.params;
+    let table_name = selectTableDevices(idEmpresa);
     const { devi_anid,	devi_date,	devi_esta,	devi_ccli,	devi_cobj,	devi_marc,	devi_mode, devi_ncli,	devi_nobj, devi_nlin, devi_coor, devi_radi, devi_ubic, devi_vers } = req.body;
     const [result] = await pool.query(
-      "INSERT INTO devices VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+      "INSERT INTO " + table_name + " VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
       [ devi_anid,	devi_date,	devi_esta,	devi_ccli,	devi_cobj,	devi_marc,	devi_mode, devi_ncli,	devi_nobj, devi_nlin, devi_coor, devi_radi, devi_ubic, devi_vers ]
     );
     res.json({ result: 0 } );
@@ -286,8 +291,9 @@ const getAllDevices = async (req, res) => {
 
 const deleteDevice = async (req, res) => {
   try {
-    const { androidID } = req.params;
-    const [result] = await pool.query("DELETE FROM devices WHERE DEVI_ANID = ?",
+    const { androidID, idEmpresa } = req.params;
+    let table_name = selectTableDevices(idEmpresa);
+    const [result] = await pool.query("DELETE FROM " + table_name + " WHERE DEVI_ANID = ?",
     [ androidID ]);
     if (result.affectedRows === 0){
       res.status(404).json({ result: 0 }); // Android ID no econtrado
@@ -301,8 +307,10 @@ const deleteDevice = async (req, res) => {
 
 const updateDevice = async (req, res) => {
   try {
+    const { idEmpresa } = req.params;
+    let table_name = selectTableDevices(idEmpresa);
     const { devi_nlin, devi_date,	devi_esta,	devi_ccli,	devi_cobj,	devi_ncli,	devi_nobj, devi_ubic, devi_coor, devi_radi, devi_anid } = req.body;
-    const [result] = await pool.query("UPDATE devices SET DEVI_NLIN=?, DEVI_DATE=?, DEVI_ESTA=?, DEVI_CCLI=?, DEVI_COBJ=?,	DEVI_NCLI=?, DEVI_NOBJ=?, DEVI_UBIC=?, DEVI_COOR=?, DEVI_RADI=? WHERE DEVI_ANID = ?",
+    const [result] = await pool.query("UPDATE " + table_name + " SET DEVI_NLIN=?, DEVI_DATE=?, DEVI_ESTA=?, DEVI_CCLI=?, DEVI_COBJ=?,	DEVI_NCLI=?, DEVI_NOBJ=?, DEVI_UBIC=?, DEVI_COOR=?, DEVI_RADI=? WHERE DEVI_ANID = ?",
     [ devi_nlin, devi_date,	devi_esta,	devi_ccli,	devi_cobj, devi_ncli,	devi_nobj, devi_ubic, devi_coor, devi_radi, devi_anid ]
     );
     if (result.affectedRows === 0){
@@ -380,7 +388,9 @@ const decrementCounter = async (req, res) => {
 
 const getRequestDevices = async (req, res) => {
   try {
-    const [rows] = await pool.query("SELECT * FROM request_device");
+    const { idEmpresa } = req.params;
+    let table_name = selectTableRequestDevices(idEmpresa);
+    const [rows] = await pool.query("SELECT * FROM " + table_name);
     res.json(rows);
   } catch (error) {
     res.status(500).json({ message: "Something goes wrong" });
@@ -389,8 +399,9 @@ const getRequestDevices = async (req, res) => {
 
 const countPending = async (req, res) => {
   try {
-    const { nameCounter } = req.params;
-    const [result] = await pool.query("SELECT COUNT(*) AS counter FROM request_device WHERE RDEV_ESTA = 'pending' ");
+    const { idEmpresa } = req.params;
+    let table_name = selectTableRequestDevices(idEmpresa);
+    const [result] = await pool.query("SELECT COUNT(*) AS counter FROM " + table_name + " WHERE RDEV_ESTA = 'pending' ");
     return res.status(201).json({ counter: result[0].counter });
   } catch (error) {
     return res.status(500).json({ error: error });
@@ -414,8 +425,9 @@ const addRequestDevice = async (req, res) => {
 
 const statusAdded = async (req, res) => {
   try {
-    const { androidID } = req.params;
-    const [result] = await pool.query("UPDATE request_device SET RDEV_ESTA = 'added' WHERE RDEV_ANID = ?",
+    const { androidID, idEmpresa } = req.params;
+    let table_name = selectTableRequestDevices(idEmpresa);
+    const [result] = await pool.query("UPDATE " + table_name + " SET RDEV_ESTA = 'added' WHERE RDEV_ANID = ?",
     [ androidID ]);
     if (result.affectedRows === 0){
       return res.status(404).json({ message: "androidID no econtrado" }); // Cambiar status para que no salte como error cuando no hay modificaciones
@@ -429,8 +441,9 @@ const statusAdded = async (req, res) => {
 
 const deleteRequestDevice = async (req, res) => {
   try {
-    const { androidID } = req.params;
-    const [result] = await pool.query("DELETE FROM request_device WHERE RDEV_ANID = ?",
+    const { androidID, idEmpresa } = req.params;
+    let table_name = selectTableRequestDevices(idEmpresa);
+    const [result] = await pool.query("DELETE FROM " + table_name + " WHERE RDEV_ANID = ?",
     [ androidID ]);
     if (result.affectedRows === 0){
       return res.status(404).json({ result: 0 }); //androidID no econtrado
@@ -444,7 +457,9 @@ const deleteRequestDevice = async (req, res) => {
 
 const deleteAllRequestDevice = async (req, res) => {
   try {
-    const [result] = await pool.query("DELETE FROM request_device");
+    const { idEmpresa } = req.params;
+    let table_name = selectTableRequestDevices(idEmpresa);
+    const [result] = await pool.query("DELETE FROM " + table_name);
     res.status(201).json({ result: 1}); // Todas las solicitudes eliminadas
   } catch (error) {
     res.status(500).json({ result: 2 }); //Error en el Servidor
