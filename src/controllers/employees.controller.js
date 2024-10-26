@@ -193,15 +193,36 @@ const getPersonal = async (req, res) => {
   }
 };
 
+const getNumberPersonal = async (req, res) => {
+  try {
+    const { idEmpresa } = req.params;
+    const [rows] = await pool.query("SELECT COUNT(*) AS counter FROM personal WHERE PERS_EMPR = ? AND PERS_FEGR IS NULL ",
+    [ idEmpresa ]);
+    return res.json(rows);
+  } catch (error) {
+    return res.status(500).json({ message: "Something goes wrong" });
+  }
+};
+
 // TABLE OBJETIVOS (CLIENTES)
 
-const getClientes = async (req, res) => {
+const getAllClientes = async (req, res) => {
   try {
     const { idEmpresa } = req.params;
     const [rows] = await pool.query("SELECT OBJE_CODI, TRIM(OBJE_NOMB) AS OBJE_NOMB FROM objetivo WHERE OBJE_EMPR=? AND OBJE_BAJA IS NULL ORDER BY OBJE_NOMB ASC",[ idEmpresa ]);
     res.json(rows);
   } catch (error) {
     return res.status(500).json({ message: "Something goes wrong" });
+  }
+};
+
+const getNumberClientes = async (req, res) => {
+  try {
+    const { idEmpresa } = req.params;
+    const [result] = await pool.query("SELECT COUNT(*) AS counter FROM objetivo WHERE OBJE_EMPR=? AND OBJE_BAJA IS NULL",[ idEmpresa ]);
+    return res.status(201).json({ counter: result[0].counter });
+  } catch (error) {
+    return res.status(500).json({ error: error });
   }
 };
 
@@ -220,10 +241,21 @@ const getCliente = async (req, res) => {
 
 const getAllObjetivos = async (req, res) => {
   try {
-    const [rows] = await pool.query("SELECT DISTINCT GRUP_CODI, TRIM(GRUP_NOMB) AS GRUP_NOMB FROM puestos, puesgrup WHERE PUES_GRUP=GRUP_CODI AND OBJE_BAJA IS NULL");
+    const { idEmpresa } = req.params;
+    const [rows] = await pool.query("SELECT GRUP_CODI, OBJE_NOMB, TRIM(GRUP_NOMB) AS GRUP_NOMB FROM puesgrup g JOIN puestos p ON g.GRUP_CODI = p.PUES_GRUP JOIN objetivo o ON p.PUES_OBJE = o.OBJE_CODI WHERE o.OBJE_BAJA IS NULL AND g.OBJE_BAJA IS NULL AND (g.GRUP_HABI = 1 OR g.GRUP_HABI = 2) AND p.PUES_TIPO != 3 AND o.OBJE_EMPR = ?", [ idEmpresa ]);
     res.json(rows);
   } catch (error) {
     return res.status(500).json({ message: "Something goes wrong" });
+  }
+};
+
+const getNumberObjetivos = async (req, res) => {
+  try {
+    const { idEmpresa } = req.params;
+    const [result] = await pool.query("SELECT COUNT(DISTINCT GRUP_CODI) AS counter FROM puesgrup g JOIN puestos p ON g.GRUP_CODI = p.PUES_GRUP JOIN objetivo o ON p.PUES_OBJE = o.OBJE_CODI WHERE o.OBJE_BAJA IS NULL AND g.OBJE_BAJA IS NULL AND (g.GRUP_HABI = 1 OR g.GRUP_HABI = 2) AND p.PUES_TIPO != 3 AND o.OBJE_EMPR = ?", [ idEmpresa ]);
+    return res.status(201).json({ counter: result[0].counter });
+  } catch (error) {
+    return res.status(500).json({ error: error });
   }
 };
 
@@ -490,6 +522,27 @@ const getPuestosFeriados = async (req, res) => {
   }
 };
 
+const getAllPuestos = async (req, res) => {
+  try {
+    const { idEmpresa } = req.params;
+    const [rows] = await pool.query("SELECT p.PUES_CODI, o.OBJE_NOMB, g.GRUP_NOMB, p.PUES_NOMB, p.PUES_DHOR, p.PUES_HHOR FROM puestos p JOIN objetivo o ON p.PUES_OBJE = o.OBJE_CODI JOIN puesgrup g ON p.PUES_GRUP = g.GRUP_CODI WHERE o.OBJE_BAJA IS NULL AND p.PUES_TIPO != 3 AND o.OBJE_EMPR = ?",
+    [ idEmpresa ]);
+    res.json(rows);
+  } catch (error) {
+    return res.status(500).json({ message: "Something goes wrong" });
+  }
+};
+
+const getNumberPuestos = async (req, res) => {
+  try {
+    const { idEmpresa } = req.params;
+    const [result] = await pool.query("SELECT COUNT(*) AS counter FROM puestos p JOIN objetivo o ON p.PUES_OBJE = o.OBJE_CODI JOIN puesgrup g ON p.PUES_GRUP = g.GRUP_CODI WHERE o.OBJE_BAJA IS NULL AND p.PUES_TIPO != 3 AND o.OBJE_EMPR = ?",[ idEmpresa ]);
+    return res.status(201).json({ counter: result[0].counter });
+  } catch (error) {
+    return res.status(500).json({ error: error });
+  }
+};
+
 // TABLE APP VERSION
 
 const getLastVersion = async (req, res) => {
@@ -600,9 +653,12 @@ module.exports = {
   setHoraEgresoVigilador,
   addPuestoVigilador,
   getPersonal,
-  getClientes,
+  getNumberPersonal,
+  getAllClientes,
+  getNumberClientes,
   getCliente,
   getAllObjetivos,
+  getNumberObjetivos,
   getObjetivos,
   requestCoordinate,
   getCounter,
@@ -620,8 +676,10 @@ module.exports = {
   deleteRequestDevice,
   deleteAllRequestDevice,
   getPuestos,
+  getPuestosFeriados,
+  getAllPuestos,
+  getNumberPuestos,                   
   getLastVersion,
   updateVersionDevice,
-  getAllHolidays,
-  getPuestosFeriados
+  getAllHolidays
   };

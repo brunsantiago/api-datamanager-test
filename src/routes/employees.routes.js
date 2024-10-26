@@ -13,9 +13,12 @@ const {
   setHoraEgresoVigilador,
   addPuestoVigilador,
   getPersonal,
-  getClientes,
+  getNumberPersonal,
+  getAllClientes,
+  getNumberClientes,
   getCliente,
   getAllObjetivos,
+  getNumberObjetivos,
   getObjetivos,
   requestCoordinate,
   getCounter,
@@ -33,10 +36,12 @@ const {
   deleteRequestDevice,
   deleteAllRequestDevice,
   getPuestos,
+  getPuestosFeriados,
+  getAllPuestos,
+  getNumberPuestos,
   getLastVersion,
   updateVersionDevice,
-  getAllHolidays,
-  getPuestosFeriados
+  getAllHolidays
   } = require("../controllers/employees.controller.js");
 
 
@@ -86,14 +91,21 @@ router.post("/asigvigi", addPuestoVigilador);
 
 // TABLE PERSONAL
 
+// GET Todo el personal activo por empresa
+router.get("/personal/number/:idEmpresa", getNumberPersonal);
+
 // GET Personal
 router.get("/personal/:nroLegajo/:idEmpresa", getPersonal);
+
 
 
 // TABLE OBJETIVO (CLIENTES)
 
 // GET all Clientes
-router.get("/clientes/:idEmpresa", getClientes);
+router.get("/clientes/:idEmpresa", getAllClientes);
+
+// GET Cantidad de clientes activos por empresa
+router.get("/clientes/number/:idEmpresa", getNumberClientes);
 
 // GET Cliente (Activo)
 router.get("/clientes/:nombreCliente/:idEmpresa", getCliente);
@@ -102,7 +114,10 @@ router.get("/clientes/:nombreCliente/:idEmpresa", getCliente);
 // TABLE PUESGRUP (OBJETIVOS)
 
 // GET all Objetivos
-router.get("/objetivos", getAllObjetivos);
+router.get("/objetivos/all/:idEmpresa", getAllObjetivos);
+
+// GET Cantidad de objetivos activos por empresa
+router.get("/objetivos/number/:idEmpresa", getNumberObjetivos);
 
 // GET Objetivos from Cliente
 router.get("/objetivos/:idCliente", getObjetivos)
@@ -155,11 +170,15 @@ router.delete("/request_device/:idEmpresa", deleteAllRequestDevice );
 
 // TABLE PUESTOS
 
+// GET Puestos Activos por empresa
+router.get("/puestos/all/:idEmpresa", getAllPuestos);
+
+// GET Cantidad de puestos activos por empresa
+router.get("/puestos/number/:idEmpresa", getNumberPuestos);
+
 // GET Puestos Activos por Cliente y Objetivo
 router.get("/puestos/:idCliente/:idObjetivo", getPuestos);
 
-// GET Puestos Activos Feriados por Cliente y Objetivo
-router.get("/puestos/test/:idCliente/:idObjetivo", getPuestosFeriados);
 
 //TABLE APP VERSION
 
