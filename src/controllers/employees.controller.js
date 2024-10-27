@@ -196,9 +196,9 @@ const getPersonal = async (req, res) => {
 const getNumberPersonal = async (req, res) => {
   try {
     const { idEmpresa } = req.params;
-    const [rows] = await pool.query("SELECT COUNT(*) AS counter FROM personal WHERE PERS_EMPR = ? AND PERS_FEGR IS NULL ",
+    const [result] = await pool.query("SELECT COUNT(*) AS counter FROM personal WHERE PERS_EMPR = ? AND PERS_FEGR IS NULL ",
     [ idEmpresa ]);
-    return res.json(rows);
+    return res.status(201).json({ counter: result[0].counter });
   } catch (error) {
     return res.status(500).json({ message: "Something goes wrong" });
   }
