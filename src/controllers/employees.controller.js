@@ -156,9 +156,9 @@ const setHoraEgresoVigilador = async (req, res) => {
     const [result] = await pool.query("UPDATE asigvigi_app SET ASIG_HHOR = ? WHERE ASIG_ID = ?",
     [ horaEgreso, asigId]);
     if (result.affectedRows === 0){
-      return res.status(404).json({ result: 0 });
+      return res.status(200).json({ result: 0 });
     }else{
-      res.status(201).json({ result: 1 });
+      res.status(200).json({ result: 1 });
     }
   } catch (error) {
     return res.status(500).json({ message: "Something goes wrong" + error });
